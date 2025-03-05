@@ -36,19 +36,6 @@ btnScrollTo.addEventListener('click', function (e) {
   sectionOne.scrollIntoView({ behavior: 'smooth' });
 });
 
-//////////////////////////////////////////////////////
-// document.querySelectorAll('.nav__link').forEach(link => {
-//   link.addEventListener('click', function (e) {
-//     e.preventDefault();
-//     const id = this.getAttribute('href');
-//     document.querySelector(id).scrollIntoView({ behavior: 'smooth' });
-//   });
-// });
-document.querySelector('.nav__links').addEventListener('click', function (e) {
-  const id = e.target.getAttribute('href');
-  document.querySelector(id).scrollIntoView({ behavior: 'smooth' });
-});
-
 const randomInt = (max, min) => {
   return Math.floor(Math.random() * (max - min + 1) + min);
 };
@@ -56,7 +43,6 @@ const randomRGB = () => {
   return randomInt(0, 255);
 };
 const h1 = document.querySelector('h1');
-// h1.firstElementChild.style.backgroundColor = 'white';
 
 [...h1.parentElement.children].forEach(function (el) {
   if (h1 !== el) el.style.transform = 'scale(0.5)';
@@ -78,25 +64,11 @@ tabContainer.addEventListener('click', e => {
     .classList.add('operations__content--active');
 });
 
-// document.querySelector('.nav').addEventListener('click', function (e) {
-//   console.log(e.target, e.currentTarget);
-//   this.style.backgroundColor = `rgb(${randomRGB()}, ${randomRGB()}, ${randomRGB()}) `;
-// });
-// document.querySelector('.nav__links').addEventListener('click', function (e) {
-//   console.log(e.target, e.currentTarget);
-//   this.style.backgroundColor = `rgb(${randomRGB()}, ${randomRGB()}, ${randomRGB()}) `;
-// });
-// document.querySelector('.nav__item').addEventListener('click', function (e) {
-//   console.log(e.target, e.currentTarget);
-//   this.style.backgroundColor = `rgb(${randomRGB()}, ${randomRGB()}, ${randomRGB()}) `;
-// });
-
 // Make a sticky navigation
 const header = document.querySelector('.header');
 const observer = new IntersectionObserver(
   function (entries) {
     const entry = entries[0];
-    console.log(entry);
     if (!entry.isIntersecting) {
       document.querySelector('.nav').classList.add('sticky');
     }
@@ -110,5 +82,14 @@ const observer = new IntersectionObserver(
     rootMargin: '-90px',
   }
 );
-
 observer.observe(header);
+
+// Page navigation smooth scrolling
+document.querySelector('.nav__links').addEventListener('click', function (e) {
+  e.preventDefault();
+  if (e.target.classList.contains('nav__link')) {
+    const id = e.target.getAttribute('href');
+    id !== '#' &&
+      document.querySelector(id).scrollIntoView({ behavior: 'smooth' });
+  }
+});
