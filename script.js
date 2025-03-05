@@ -8,7 +8,8 @@ const overlay = document.querySelector('.overlay');
 const btnCloseModal = document.querySelector('.btn--close-modal');
 const btnsOpenModal = document.querySelectorAll('.btn--show-modal');
 
-const openModal = function () {
+const openModal = function (e) {
+  e.preventDefault();
   modal.classList.remove('hidden');
   overlay.classList.remove('hidden');
 };
@@ -18,8 +19,7 @@ const closeModal = function () {
   overlay.classList.add('hidden');
 };
 
-for (let i = 0; i < btnsOpenModal.length; i++)
-  btnsOpenModal[i].addEventListener('click', openModal);
+btnsOpenModal.forEach(btn => btn.addEventListener('click', openModal));
 
 btnCloseModal.addEventListener('click', closeModal);
 overlay.addEventListener('click', closeModal);
@@ -33,14 +33,6 @@ document.addEventListener('keydown', function (e) {
 const btnScrollTo = document.querySelector('.btn--scroll-to');
 const sectionOne = document.querySelector('#section--1');
 btnScrollTo.addEventListener('click', function (e) {
-  const scoord1 = sectionOne.getBoundingClientRect();
-  console.log({ scrollX, scrollY });
-  // window.scrollTo({
-  //   left: scoord1.left + scrollX,
-  //   top: scoord1.top + scrollY,
-  //   behavior: 'smooth',
-  // });
-  // The above implementation is the same with the below one
   sectionOne.scrollIntoView({ behavior: 'smooth' });
 });
 
@@ -98,3 +90,25 @@ tabContainer.addEventListener('click', e => {
 //   console.log(e.target, e.currentTarget);
 //   this.style.backgroundColor = `rgb(${randomRGB()}, ${randomRGB()}, ${randomRGB()}) `;
 // });
+
+// Make a sticky navigation
+const header = document.querySelector('.header');
+const observer = new IntersectionObserver(
+  function (entries) {
+    const entry = entries[0];
+    console.log(entry);
+    if (!entry.isIntersecting) {
+      document.querySelector('.nav').classList.add('sticky');
+    }
+    if (entry.isIntersecting) {
+      document.querySelector('.nav').classList.remove('sticky');
+    }
+  },
+  {
+    root: null,
+    threshold: 0,
+    rootMargin: '-90px',
+  }
+);
+
+observer.observe(header);
