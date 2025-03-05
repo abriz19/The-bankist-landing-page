@@ -48,22 +48,6 @@ const h1 = document.querySelector('h1');
   if (h1 !== el) el.style.transform = 'scale(0.5)';
 });
 
-const tabContainer = document.querySelector('.operations__tab-container');
-const tabs = document.querySelectorAll('.btn.operations__tab');
-const tabsContent = document.querySelectorAll('.operations__content');
-tabContainer.addEventListener('click', e => {
-  const closestTabContent = e.target.closest('.operations__tab');
-  const contentValue = closestTabContent.dataset.tab;
-  [...tabs].forEach(tab => tab.classList.remove('operations__tab--active'));
-  [...tabsContent].forEach(content =>
-    content.classList.remove('operations__content--active')
-  );
-  closestTabContent.classList.add('operations__tab--active');
-  document
-    .querySelector(`.operations__content--${contentValue}`)
-    .classList.add('operations__content--active');
-});
-
 // Make a sticky navigation
 const header = document.querySelector('.header');
 const observer = new IntersectionObserver(
@@ -92,4 +76,28 @@ document.querySelector('.nav__links').addEventListener('click', function (e) {
     id !== '#' &&
       document.querySelector(id).scrollIntoView({ behavior: 'smooth' });
   }
+});
+
+// Tabbed component
+const tabs = document.querySelectorAll('.operations__tab');
+const tabsContainer = document.querySelector('.operations__tab-container');
+const tabContent = document.querySelectorAll('.operations__content');
+
+tabsContainer.addEventListener('click', function (e) {
+  const clickedTab = e.target.closest('.operations__tab');
+  if (!clickedTab) return;
+
+  // Removing active classes
+  tabs.forEach(tab => tab.classList.remove('operations__tab--active'));
+  tabContent.forEach(content =>
+    content.classList.remove('operations__content--active')
+  );
+
+  // Activating tab
+  clickedTab.classList.add('operations__tab--active');
+
+  // Displaying content
+  document
+    .querySelector(`.operations__content--${clickedTab.dataset.tab}`)
+    .classList.add('operations__content--active');
 });
