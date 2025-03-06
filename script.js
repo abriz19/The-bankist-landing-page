@@ -30,23 +30,23 @@ document.addEventListener('keydown', function (e) {
   }
 });
 
-const btnScrollTo = document.querySelector('.btn--scroll-to');
-const sectionOne = document.querySelector('#section--1');
-btnScrollTo.addEventListener('click', function (e) {
-  sectionOne.scrollIntoView({ behavior: 'smooth' });
-});
+// const btnScrollTo = document.querySelector('.btn--scroll-to');
+// const sectionOne = document.querySelector('#section--1');
+// btnScrollTo.addEventListener('click', function (e) {
+//   sectionOne.scrollIntoView({ behavior: 'smooth' });
+// });
 
-const randomInt = (max, min) => {
-  return Math.floor(Math.random() * (max - min + 1) + min);
-};
-const randomRGB = () => {
-  return randomInt(0, 255);
-};
-const h1 = document.querySelector('h1');
+// const randomInt = (max, min) => {
+//   return Math.floor(Math.random() * (max - min + 1) + min);
+// };
+// const randomRGB = () => {
+//   return randomInt(0, 255);
+// };
+// const h1 = document.querySelector('h1');
 
-[...h1.parentElement.children].forEach(function (el) {
-  if (h1 !== el) el.style.transform = 'scale(0.5)';
-});
+// [...h1.parentElement.children].forEach(function (el) {
+//   if (h1 !== el) el.style.transform = 'scale(0.5)';
+// });
 
 // Make a sticky navigation
 const header = document.querySelector('.header');
@@ -158,3 +158,72 @@ const imgObserver = new IntersectionObserver(loadImg, {
   rootMargin: '200px',
 });
 imgTargets.forEach(img => imgObserver.observe(img));
+
+// Slider component
+const slider = function () {
+  const slides = document.querySelectorAll('.slide');
+  const slider = document.querySelector('.slider');
+  const btnLeft = document.querySelector('.slider__btn--left');
+  const btnRight = document.querySelector('.slider__btn--right');
+
+  const dotContainer = document.querySelector('.dots');
+
+  let currentSlide = 0;
+  const lastSlide = slides.length - 1;
+
+  const createDots = function () {
+    slides.forEach((_, i) => {
+      document
+        .querySelector('.dots')
+        .insertAdjacentHTML(
+          'beforeend',
+          `<button class="dots__dot" data-slide="${i}"></button>`
+        );
+    });
+  };
+
+  const activateDot = function (slide) {
+    document.querySelectorAll('.dots__dot').forEach(dot => {
+      dot.classList.remove('dots__dot--active');
+      dot.dataset.slide == slide && dot.classList.add('dots__dot--active');
+    });
+  };
+
+  const goToSlide = function (slide) {
+    slides.forEach((s, i) => {
+      s.style.transform = `translateX(${100 * (i - slide)}%)`;
+    });
+    activateDot(slide);
+  };
+
+  const init = function () {
+    createDots();
+    goToSlide(0);
+  };
+  init();
+
+  const nextSlide = function () {
+    currentSlide++;
+    currentSlide == slides.length && (currentSlide = 0);
+    goToSlide(currentSlide);
+  };
+  const prevSlide = function () {
+    currentSlide--;
+    currentSlide < 0 && (currentSlide = lastSlide);
+    goToSlide(currentSlide);
+  };
+  btnRight.addEventListener('click', nextSlide);
+  btnLeft.addEventListener('click', prevSlide);
+
+  document.addEventListener('keydown', function (e) {
+    e.key === 'ArrowRight' && nextSlide();
+    e.key === 'ArrowLeft' && prevSlide();
+  });
+
+  dotContainer.addEventListener('click', function (e) {
+    e.preventDefault();
+    e.target.classList.contains('dots__dot') &&
+      goToSlide(e.target.dataset.slide);
+  });
+};
+slider();
