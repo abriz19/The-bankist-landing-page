@@ -101,3 +101,19 @@ tabsContainer.addEventListener('click', function (e) {
     .querySelector(`.operations__content--${clickedTab.dataset.tab}`)
     .classList.add('operations__content--active');
 });
+
+// Menu fade animation
+const handleHover = function (e) {
+  const hoveredLink = e.target;
+  if (hoveredLink.classList.contains('nav__link')) {
+    const siblings = hoveredLink.closest('.nav').querySelectorAll('.nav__link');
+    const logo = hoveredLink.closest('.nav').querySelector('img');
+    siblings.forEach(el => {
+      if (el !== hoveredLink) el.style.opacity = this;
+    });
+    logo.style.opacity = this;
+  }
+};
+const navEl = document.querySelector('.nav');
+navEl.addEventListener('mouseover', handleHover.bind(0.5));
+navEl.addEventListener('mouseout', handleHover.bind(1));
